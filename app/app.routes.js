@@ -4,7 +4,7 @@ angular.module('appModule')
       enabled: true,
     });
   })
-  .config(($stateProvider) => {
+  .config(($stateProvider, $urlRouterProvider) => {
     $stateProvider
       .state({
         name: 'app',
@@ -17,5 +17,16 @@ angular.module('appModule')
         name: 'team-performance',
         url: '/team-performance',
         template: '<v-performance-page></v-performance-page>',
+      })
+      .state('404', {
+        name: 'catch-404',
+        template: '<v-not-found-page></v-not-found-page>',
       });
+
+    // show a not found error if route is unkown, but keep the original url
+    $urlRouterProvider.otherwise(function ($injector) {
+      $injector.invoke(function ($state) {
+        $state.transitionTo('404', {}, false);
+      });
+    });
   });
